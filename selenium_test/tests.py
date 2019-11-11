@@ -14,7 +14,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     def test_login(self):
         user_name = "arnelsaquilabon@gmail.com"
         password = "password"
-        self.browser.get("http://localhost:8000/login/")
+        self.browser.get(self.live_server_url + "/login/")
         self.browser.find_element_by_id("username").send_keys(user_name)
         self.browser.find_element_by_id("password").send_keys(password)
         self.browser.find_element_by_class_name("btn").click()
