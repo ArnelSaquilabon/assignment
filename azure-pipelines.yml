@@ -7,7 +7,7 @@ trigger:
 - azure-pipeline
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'selenium/standalone-chrome'
 strategy:
   matrix:
     Python35:
@@ -41,26 +41,9 @@ steps:
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
 - script: |
-    #python -m pip install --upgrade pip setuptools wheel
-    #pip install -r requirements.txt
-    #pip install unittest-xml-reporting
     pip install django
-    pip install selenium
     python manage.py makemigrations
     python manage.py migrate
-
-    #install chrome
-    sudo apt-get install libxss1 libappindicator1 libindicator7
-    wget https://dl.google.com/linux/direct/google-chrome-
-    stable_current_amd64.deb
-
-    sudo dpkg -i google-chrome*.deb
-    sudo apt-get install -f
-
-    #install chrome driver
-    wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
-    unzip chromedriver_linux64.zip
-    chmod +x chromedriver
 
     sudo mv -f chromedriver /usr/local/share/chromedriver
     sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
@@ -71,9 +54,3 @@ steps:
     pushd '$(projectRoot)'
     python manage.py test selenium_test
   displayName: 'Run tests'
-
-#- task: PublishTestResults@2
-#  inputs:
-#    testResultsFiles: "**/TEST-*.xml"
-#    testRunTitle: 'Python $(PYTHON_VERSION)'
-#  condition: succeededOrFailed()
