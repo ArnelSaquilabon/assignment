@@ -1,13 +1,8 @@
-# Python Django
-# Test a Django project on multiple versions of Python.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
 - azure-pipeline
 
 pool:
-  vmImage: 'standalone-chrome'
+  vmImage: 'ubuntu-latest'
 strategy:
   matrix:
     Python35:
@@ -41,9 +36,26 @@ steps:
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
 - script: |
+    #python -m pip install --upgrade pip setuptools wheel
+    #pip install -r requirements.txt
+    #pip install unittest-xml-reporting
     pip install django
+    pip install selenium
     python manage.py makemigrations
     python manage.py migrate
+
+    #install chrome
+    sudo apt-get install libxss1 libappindicator1 libindicator7
+    wget https://dl.google.com/linux/direct/google-chrome-
+    stable_current_amd64.deb
+
+    sudo dpkg -i google-chrome*.deb
+    sudo apt-get install -f
+
+    #install chrome driver
+    wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
+    unzip chromedriver_linux64.zip
+    chmod 755 chromedriver
 
     sudo mv -f chromedriver /usr/local/share/chromedriver
     sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
