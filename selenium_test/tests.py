@@ -5,7 +5,7 @@ from selenium import webdriver
 class SeleniumTest(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome("./selenium_test/drivers/chromedriver.exe")
+        self.browser = webdriver.Chrome("./selenium_test/drivers/chromedriver")
         self.browser.set_page_load_timeout(10)
 
     def tearDown(self):
