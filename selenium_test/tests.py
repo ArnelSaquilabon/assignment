@@ -5,7 +5,12 @@ from selenium import webdriver
 class SeleniumTest(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--disable-extensions')
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        self.browser = webdriver.Chrome(chrome_options=options)
         self.browser.set_page_load_timeout(10)
 
     def tearDown(self):
