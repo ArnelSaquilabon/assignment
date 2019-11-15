@@ -7,7 +7,7 @@ trigger:
 - azure-pipeline
 
 pool:
-  vmImage: 'selenium/standalone-chrome'
+  vmImage: 'standalone-chrome'
 strategy:
   matrix:
     Python35:
