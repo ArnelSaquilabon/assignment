@@ -1,56 +1,53 @@
 trigger:
-- azure-pipeline
+  - azure-pipeline
 
 pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python35:
-      PYTHON_VERSION: '3.5'
-    Python36:
-      PYTHON_VERSION: '3.6'
     Python37:
       PYTHON_VERSION: '3.7'
   maxParallel: 3
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(PYTHON_VERSION)'
-    architecture: 'x64'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(PYTHON_VERSION)'
+      architecture: 'x64'
 
-- task: PythonScript@0
-  displayName: 'Export project path'
-  inputs:
-    scriptSource: 'inline'
-    script: |
-      """Search all subdirectories for `manage.py`."""
-      from glob import iglob
-      from os import path
-      # Python >= 3.5
-      manage_py = next(iglob(path.join('**', 'manage.py'), recursive=True), None)
-      if not manage_py:
-          raise SystemExit('Could not find a Django project')
-      project_location = path.dirname(path.abspath(manage_py))
-      print('Found Django project in', project_location)
-      print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
+  - task: PythonScript@0
+    displayName: 'Export project path'
+    inputs:
+      scriptSource: 'inline'
+      script: |
+        """Search all subdirectories for `manage.py`."""
+        from glob import iglob
+        from os import path
+        # Python >= 3.5
+        manage_py = next(iglob(path.join('**', 'manage.py'), recursive=True), None)
+        if not manage_py:
+            raise SystemExit('Could not find a Django project')
+        project_location = path.dirname(path.abspath(manage_py))
+        print('Found Django project in', project_location)
+        print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-- script: |
-    pip install django
-    pip install selenium
-    python manage.py makemigrations
-    python manage.py migrate
+  - script: |
+      pip install django
+      pip install selenium
+      python manage.py makemigrations
+      python manage.py migrate
 
-    #install chrome
-    sudo apt-get install libxss1 libappindicator1 libindicator7
-    wget https://dl.google.com/linux/direct/google-chrome-
-    stable_current_amd64.deb
+      #install chrome
+      sudo apt-get install libxss1 libappindicator1 libindicator7
+      wget https://dl.google.com/linux/direct/google-chrome-
+      stable_current_amd64.deb
 
-    sudo dpkg -i google-chrome*.deb
-    sudo apt-get install -f
-  displayName: 'Install prerequisites'
+      sudo dpkg -i google-chrome*.deb
+      sudo apt-get install -f
+    displayName: 'Install prerequisites'
 
-- script: |
-    cd '$(projectRoot)'
-    python manage.py test selenium_test
-  displayName: 'Run tests'
+  - script: |
+      echo '$(projectRoot)'
+      cd '$(projectRoot)'
+      python manage.py test selenium_test
+    displayName: 'Run tests'
