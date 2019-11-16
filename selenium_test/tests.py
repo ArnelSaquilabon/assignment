@@ -12,7 +12,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
-        self.browser = webdriver.Chrome(chrome_options=options)
+        self.browser = webdriver.Chrome(chrome_options=options, executable_path="selenium_test/drivers/chromedriver")
         self.browser.set_page_load_timeout(10)
 
     def tearDown(self):
