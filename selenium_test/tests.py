@@ -1,10 +1,12 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
+import sys
 
 
 class SeleniumTest(StaticLiveServerTestCase):
 
     def setUp(self):
+        print("Location:" + sys.prefix)
         options = webdriver.ChromeOptions()
         options.add_argument('--disable-extensions')
         options.add_argument('--headless')
