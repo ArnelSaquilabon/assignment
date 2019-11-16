@@ -48,6 +48,6 @@ steps:
 
   - script: |
       cd '$(projectRoot)'
-      chmod 755 -r '$(projectRoot)'/selenium_test
+      chmod 755 -R '$(projectRoot)'/selenium_test
       python manage.py test selenium_test
     displayName: 'Run tests'
