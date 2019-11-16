@@ -10,8 +10,6 @@ class SeleniumTest(StaticLiveServerTestCase):
         directory = os.getcwd()
         chrome_driver_name = 'chromedriver' if platform.system() == 'Linux' else 'chromedriver.exe'
         chrome_driver_directory = directory + "/selenium_test/drivers/" + chrome_driver_name
-        print(chrome_driver_directory)
-        print("Path exists: %s" % os.path.exists(chrome_driver_directory))
         options = webdriver.ChromeOptions()
         options.add_argument('--disable-extensions')
         options.add_argument('--headless')
